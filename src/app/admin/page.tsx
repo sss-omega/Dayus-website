@@ -6,6 +6,11 @@ import { redirect } from "next/navigation";
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
+  const session = cookies().get("admin_session");
+  if (!session || session.value !== "authenticated") {
+    redirect("/login");
+  }
+
   const [categories, products, settings] = await Promise.all([
     prisma.category.findMany(),
     prisma.product.findMany({ include: { category: true } }),
