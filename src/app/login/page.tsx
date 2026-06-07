@@ -8,7 +8,7 @@ export default function LoginPage() {
     if (password === "dauys2026") {
       cookies().set("admin_session", "authenticated", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: false, // Set to false so it works on local HTTP
         maxAge: 60 * 60 * 24, // 1 day
         path: "/",
       });
