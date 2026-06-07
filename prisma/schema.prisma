@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float?
+  imageUrl    String?
+  kaspiLink   String?
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteSettings {
+  id          Int      @id @default(1)
+  headerTitle String   @default("DAUYS")
+  footerText  String   @default("© 2026 DAUYS. All rights reserved.")
+  heroTitle   String   @default("Experience True Sound")
+  heroDesc    String   @default("Premium audio speakers designed for audiophiles.")
+  updatedAt   DateTime @updatedAt
+}

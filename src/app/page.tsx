@@ -1,101 +1,153 @@
-import Image from "next/image";
+import prisma from "@/lib/prisma";
+import { Category, Product } from "@prisma/client";
 
-export default function Home() {
+export const dynamic = 'force-dynamic';
+
+export default async function Home() {
+  const [categories, settings] = await Promise.all([
+    prisma.category.findMany({
+      include: {
+        products: true,
+      },
+    }),
+    prisma.siteSettings.findUnique({ where: { id: 1 } })
+  ]);
+
+  const hasAnyProducts = categories.some(cat => cat.products.length > 0);
+  const heroTitle = settings?.heroTitle || "Experience True Sound";
+  const heroDesc = settings?.heroDesc || "Premium audio speakers designed for audiophiles. Find your perfect sound today.";
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main style={{ animation: 'fadeIn 1s ease-in-out' }}>
+      {/* Hero Section */}
+      <section className="hero">
+        <div className="container" style={{ animation: 'slideUp 1s ease-out' }}>
+          <h1>{heroTitle}</h1>
+          <p>{heroDesc}</p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      {/* Show beautiful demo if no products are added yet */}
+      {!hasAnyProducts && (
+        <section className="container" style={{ marginBottom: '100px', animation: 'fadeIn 1.5s ease-in-out' }}>
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffcc00', textTransform: 'uppercase' }}>Demo Collection</h2>
+            <p style={{ color: '#aaa', fontSize: '1.1rem' }}>This is how your site will look once you add products in the admin panel.</p>
+          </div>
+          
+          <div className="product-grid">
+            <div className="product-card">
+              <div className="product-image">
+                <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
+                  Demo
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/demo1.png" alt="Demo Speaker 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div className="product-info">
+                <h3 className="product-title">Aetherion X-1</h3>
+                <p className="product-desc">High-end floorstanding speaker with pure titanium tweeters and deep bass resonance. Perfect for large living rooms.</p>
+                <span className="price-tag">450,000 KZT</span>
+                <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
+                  Demo Mode
+                </button>
+              </div>
+            </div>
+
+            <div className="product-card">
+              <div className="product-image">
+                <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
+                  Demo
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/demo2.png" alt="Demo Speaker 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div className="product-info">
+                <h3 className="product-title">Aetherion Bookshelf</h3>
+                <p className="product-desc">Compact wireless bookshelf speaker. Brings audiophile quality to your desktop with stunning aesthetics.</p>
+                <span className="price-tag">210,000 KZT</span>
+                <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
+                  Demo Mode
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Actual Products Section */}
+      {hasAnyProducts && (
+        <section className="container">
+          {categories.map((category: Category & { products: Product[] }, idx: number) => {
+            if (category.products.length === 0) return null;
+            return (
+              <div key={category.id} style={{ marginBottom: '80px', animation: `fadeIn ${1 + idx * 0.2}s ease-in-out` }}>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '30px', borderBottom: '1px solid rgba(255, 204, 0, 0.2)', paddingBottom: '15px', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  {category.name}
+                </h2>
+                <div className="product-grid">
+                  {category.products.map((product: Product) => (
+                    <div className="product-card" key={product.id}>
+                      <div className="product-image">
+                        <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
+                          В наличии
+                        </div>
+                        {product.imageUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img 
+                            src={product.imageUrl} 
+                            alt={product.name} 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#555', background: '#111' }}>
+                            NO IMAGE
+                          </div>
+                        )}
+                      </div>
+                      <div className="product-info">
+                        <h3 className="product-title">{product.name}</h3>
+                        <p className="product-desc">{product.description || 'No description available.'}</p>
+                        <span className="price-tag">
+                          {product.price ? `${product.price.toLocaleString()} KZT` : 'Price on request'}
+                        </span>
+                        {product.kaspiLink ? (
+                          <a href={product.kaspiLink} target="_blank" rel="noopener noreferrer" className="btn-kaspi">
+                            Buy on Kaspi.kz
+                          </a>
+                        ) : (
+                          <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
+                            Not Available Online
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </section>
+      )}
+
+      {/* Features / Info Section */}
+      <section style={{ backgroundColor: 'var(--card-bg)', padding: '80px 0', marginTop: '40px', borderTop: '1px solid var(--border-color)', backdropFilter: 'blur(10px)' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '40px', textAlign: 'center' }}>
+          <div>
+            <h3 style={{ color: 'var(--accent-color)', fontSize: '1.5rem', marginBottom: '15px' }}>Premium Quality</h3>
+            <p style={{ color: '#aaa' }}>Only the highest grade materials and finest acoustic engineering.</p>
+          </div>
+          <div>
+            <h3 style={{ color: 'var(--accent-color)', fontSize: '1.5rem', marginBottom: '15px' }}>Fast Delivery</h3>
+            <p style={{ color: '#aaa' }}>Order via Kaspi.kz and get your speakers delivered straight to your door.</p>
+          </div>
+          <div>
+            <h3 style={{ color: 'var(--accent-color)', fontSize: '1.5rem', marginBottom: '15px' }}>Warranty Included</h3>
+            <p style={{ color: '#aaa' }}>12 months official warranty on all our sound systems.</p>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
