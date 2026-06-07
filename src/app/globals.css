@@ -34,15 +34,20 @@ a {
 }
 
 header {
-  padding: 20px 0;
+  padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  background-color: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50px;
   position: sticky;
-  top: 0;
+  top: 15px;
   z-index: 100;
+  margin-top: 15px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
 .logo {
@@ -87,35 +92,117 @@ header {
 }
 
 .product-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
+  position: relative;
+  border-radius: 32px;
+  padding: 1.5px; /* Border thickness */
   overflow: hidden;
-  backdrop-filter: blur(10px);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: #080707;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rotating light beam (border) */
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 15%,
+    #d95d24 30%,
+    #ffdf9e 40%,
+    #ff8a3d 45%,
+    #d95d24 55%,
+    transparent 70%
+  );
+  animation: spin 12s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Rotating outer glow blur */
+.product-card::after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 15%,
+    #d95d24 30%,
+    #ffdf9e 40%,
+    #ff8a3d 45%,
+    #d95d24 55%,
+    transparent 70%
+  );
+  animation: spin 12s linear infinite;
+  filter: blur(40px);
+  opacity: 0.22;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 204, 0, 0.15);
-  border-color: var(--accent-color);
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 35px 60px -10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(217, 93, 36, 0.25);
+}
+
+.product-card:hover::after {
+  opacity: 0.35;
+}
+
+/* Inner container that covers the rotating center */
+.product-card-inner {
+  position: relative;
+  z-index: 2;
+  background: #0d0c0c;
+  border-radius: 31px; /* Just slightly smaller than card's 32px */
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), inset 0 -1px 1px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.darkveil-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .product-image {
   width: 100%;
   height: 280px;
-  background-color: #111;
   position: relative;
   overflow: hidden;
-  border-bottom: 2px solid var(--border-color);
+  perspective: 1000px;
+  z-index: 2;
 }
 
 .product-image img {
-  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: rotateY(-10deg) rotateX(10deg) scale(1.15);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .product-card:hover .product-image img {
-  transform: scale(1.08);
+  transform: rotateY(-3deg) rotateX(3deg) scale(1.08);
 }
 
 .product-info {
@@ -123,6 +210,9 @@ header {
   display: flex;
   flex-direction: column;
   height: calc(100% - 280px);
+  flex-grow: 1;
+  position: relative;
+  z-index: 2;
 }
 
 .product-title {
@@ -243,6 +333,27 @@ header {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmerBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* --- BACKGROUND NOTES --- */
 .particles-container {
   position: fixed;
@@ -298,4 +409,16 @@ header {
   .form-group.full-width {
     grid-column: span 2;
   }
+}
+
+/* Full-page fixed dither background container */
+.dither-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.18; /* Subtle yet visible retro pixelated effect */
 }

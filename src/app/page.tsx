@@ -1,6 +1,9 @@
 import prisma from "@/lib/prisma";
 import { Category, Product } from "@prisma/client";
 import { cookies } from "next/headers";
+import DarkVeil from "@/components/DarkVeil";
+import GlitchText from "@/components/GlitchText";
+import Dither from "@/components/Dither";
 
 export const dynamic = 'force-dynamic';
 
@@ -58,10 +61,24 @@ export default async function Home() {
 
   return (
     <main style={{ animation: 'fadeIn 1s ease-in-out' }}>
+      <div className="dither-bg-container">
+        <Dither
+          waveColor={[0.95, 0.75, 0.1]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.3}
+          colorNum={4}
+          waveAmplitude={0.3}
+          waveFrequency={3}
+          waveSpeed={0.05}
+        />
+      </div>
       {/* Hero Section */}
       <section className="hero">
         <div className="container" style={{ animation: 'slideUp 1s ease-out' }}>
-          <h1>{heroTitle}</h1>
+          <h1>
+            <GlitchText speed={1.2}>{heroTitle}</GlitchText>
+          </h1>
           <p>{heroDesc}</p>
         </div>
       </section>
@@ -70,44 +87,72 @@ export default async function Home() {
       {!hasAnyProducts && (
         <section className="container" style={{ marginBottom: '100px', animation: 'fadeIn 1.5s ease-in-out' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffcc00', textTransform: 'uppercase' }}>{t.demoTitle}</h2>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#ffcc00', textTransform: 'uppercase' }}>
+              <GlitchText speed={1.5}>{t.demoTitle}</GlitchText>
+            </h2>
             <p style={{ color: '#aaa', fontSize: '1.1rem' }}>{t.demoDesc}</p>
           </div>
           
           <div className="product-grid">
             <div className="product-card">
-              <div className="product-image">
-                <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
-                  {t.demoBtn}
+              <div className="product-card-inner">
+                <div className="darkveil-container">
+                  <DarkVeil
+                    hueShift={-145}
+                    noiseIntensity={0}
+                    scanlineIntensity={0}
+                    speed={0.5}
+                    scanlineFrequency={0}
+                    warpAmount={0}
+                    resolutionScale={1}
+                  />
                 </div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/demo1.png" alt="Demo Speaker 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div className="product-info">
-                <h3 className="product-title">Aetherion X-1</h3>
-                <p className="product-desc">High-end floorstanding speaker with pure titanium tweeters and deep bass resonance. Perfect for large living rooms.</p>
-                <span className="price-tag">450,000 KZT</span>
-                <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
-                  {t.demoBtn}
-                </button>
+                <div className="product-image">
+                  <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
+                    {t.demoBtn}
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/demo1.png" alt="Demo Speaker 1" />
+                </div>
+                <div className="product-info">
+                  <h3 className="product-title">Aetherion X-1</h3>
+                  <p className="product-desc">High-end floorstanding speaker with pure titanium tweeters and deep bass resonance. Perfect for large living rooms.</p>
+                  <span className="price-tag">450,000 KZT</span>
+                  <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
+                    {t.demoBtn}
+                  </button>
+                </div>
               </div>
             </div>
 
             <div className="product-card">
-              <div className="product-image">
-                <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
-                  {t.demoBtn}
+              <div className="product-card-inner">
+                <div className="darkveil-container">
+                  <DarkVeil
+                    hueShift={-145}
+                    noiseIntensity={0}
+                    scanlineIntensity={0}
+                    speed={0.5}
+                    scanlineFrequency={0}
+                    warpAmount={0}
+                    resolutionScale={1}
+                  />
                 </div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/demo2.png" alt="Demo Speaker 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div className="product-info">
-                <h3 className="product-title">Aetherion Bookshelf</h3>
-                <p className="product-desc">Compact wireless bookshelf speaker. Brings audiophile quality to your desktop with stunning aesthetics.</p>
-                <span className="price-tag">210,000 KZT</span>
-                <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
-                  {t.demoBtn}
-                </button>
+                <div className="product-image">
+                  <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
+                    {t.demoBtn}
+                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/demo2.png" alt="Demo Speaker 2" />
+                </div>
+                <div className="product-info">
+                  <h3 className="product-title">Aetherion Bookshelf</h3>
+                  <p className="product-desc">Compact wireless bookshelf speaker. Brings audiophile quality to your desktop with stunning aesthetics.</p>
+                  <span className="price-tag">210,000 KZT</span>
+                  <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
+                    {t.demoBtn}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -122,44 +167,56 @@ export default async function Home() {
             return (
               <div key={category.id} style={{ marginBottom: '80px', animation: `fadeIn ${1 + idx * 0.2}s ease-in-out` }}>
                 <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '30px', borderBottom: '1px solid rgba(255, 204, 0, 0.2)', paddingBottom: '15px', color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  {category.name}
+                  <GlitchText speed={1.5}>{category.name}</GlitchText>
                 </h2>
                 <div className="product-grid">
                   {category.products.map((product: Product) => (
                     <div className="product-card" key={product.id}>
-                      <div className="product-image">
-                        <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
-                          {t.inStock}
-                        </div>
-                        {product.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img 
-                            src={product.imageUrl} 
-                            alt={product.name} 
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                            loading="lazy"
+                      <div className="product-card-inner">
+                        <div className="darkveil-container">
+                          <DarkVeil
+                            hueShift={-145}
+                            noiseIntensity={0}
+                            scanlineIntensity={0}
+                            speed={0.5}
+                            scanlineFrequency={0}
+                            warpAmount={0}
+                            resolutionScale={1}
                           />
-                        ) : (
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#555', background: '#111' }}>
-                            NO IMAGE
+                        </div>
+                        <div className="product-image">
+                          <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--accent-color)', color: '#000', padding: '4px 10px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 800, zIndex: 10, textTransform: 'uppercase' }}>
+                            {t.inStock}
                           </div>
-                        )}
-                      </div>
-                      <div className="product-info">
-                        <h3 className="product-title">{product.name}</h3>
-                        <p className="product-desc">{product.description || t.noDesc}</p>
-                        <span className="price-tag">
-                          {product.price ? `${product.price.toLocaleString()} KZT` : t.priceReq}
-                        </span>
-                        {product.kaspiLink ? (
-                          <a href={product.kaspiLink} target="_blank" rel="noopener noreferrer" className="btn-kaspi">
-                            {t.buyBtn}
-                          </a>
-                        ) : (
-                          <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
-                            {t.notAvail}
-                          </button>
-                        )}
+                          {product.imageUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img 
+                              src={product.imageUrl} 
+                              alt={product.name} 
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#555', background: '#111' }}>
+                              NO IMAGE
+                            </div>
+                          )}
+                        </div>
+                        <div className="product-info">
+                          <h3 className="product-title">{product.name}</h3>
+                          <p className="product-desc">{product.description || t.noDesc}</p>
+                          <span className="price-tag">
+                            {product.price ? `${product.price.toLocaleString()} KZT` : t.priceReq}
+                          </span>
+                          {product.kaspiLink ? (
+                            <a href={product.kaspiLink} target="_blank" rel="noopener noreferrer" className="btn-kaspi">
+                              {t.buyBtn}
+                            </a>
+                          ) : (
+                            <button className="btn-kaspi" style={{ opacity: 0.5, cursor: 'not-allowed' }} disabled>
+                              {t.notAvail}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
