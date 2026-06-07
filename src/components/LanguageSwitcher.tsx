@@ -29,7 +29,7 @@ export function LanguageSwitcher({ currentLang }: { currentLang: string }) {
           fontSize: '1rem'
         }}
       >
-        RU
+        РУС
       </button>
       <span style={{ color: '#444' }}>|</span>
       <button 
@@ -43,7 +43,7 @@ export function LanguageSwitcher({ currentLang }: { currentLang: string }) {
           fontSize: '1rem'
         }}
       >
-        KZ
+        ҚАЗ
       </button>
     </div>
   );
