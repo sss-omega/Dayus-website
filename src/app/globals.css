@@ -38,7 +38,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(10, 10, 10, 0.75);
+  background-color: transparent;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -656,4 +656,19 @@ header {
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 15px;
   text-transform: uppercase;
+}
+
+/* Collapsible Details Styles */
+.product-details-collapse summary::-webkit-details-marker {
+  display: none !important;
+}
+.product-details-collapse summary {
+  list-style: none !important;
+}
+.product-details-collapse {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.product-details-collapse:hover {
+  border-color: rgba(255, 204, 0, 0.15) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
 }

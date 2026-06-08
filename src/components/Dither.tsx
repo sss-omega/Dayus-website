@@ -302,6 +302,16 @@ export default function Dither({
   enableMouseInteraction = true,
   mouseRadius = 1
 }: DitherProps) {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className="dither-container" style={{ background: '#050505' }}></div>;
+  }
+
   return (
     <Canvas
       className="dither-container"

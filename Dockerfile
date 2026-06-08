@@ -2,14 +2,13 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --legacy-peer-deps
+# Cache prisma installation so it doesn't download on every code deploy
+RUN npm install -g prisma --legacy-peer-deps
 
-COPY . .
-
-RUN npx prisma generate
-RUN npm run build
+# Copy the prebuilt standalone files
+COPY ./standalone_dist ./
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npm start"]
+# Push schema changes and start the Next.js server
+CMD ["sh", "-c", "prisma db push --schema=prisma/schema.prisma --accept-data-loss && node server.js"]

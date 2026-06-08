@@ -133,7 +133,19 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     }
   }
 
-  const specs = getSpecsForProduct(product.name, locale);
+  // Parse custom specifications if they exist in the DB, otherwise fall back to auto-generated specs
+  const customSpecsText = locale === "kk" ? product.specsKk : product.specsRu;
+  let specs = [];
+  if (customSpecsText && customSpecsText.trim()) {
+    specs = customSpecsText.split("\n").map(line => {
+      const parts = line.split(":");
+      const key = parts[0]?.trim() || "";
+      const value = parts.slice(1).join(":")?.trim() || "";
+      return { key, value };
+    }).filter(item => item.key && item.value);
+  } else {
+    specs = getSpecsForProduct(product.name, locale);
+  }
 
   return (
     <main style={{ padding: "40px 0 100px 0", animation: 'fadeIn 1s ease-in-out' }}>

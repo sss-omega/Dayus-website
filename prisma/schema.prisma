@@ -22,6 +22,8 @@ model Product {
   price       Float?
   imageUrl    String?
   kaspiLink   String?
+  specsRu     String?
+  specsKk     String?
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
   createdAt   DateTime @default(now())
@@ -29,10 +31,13 @@ model Product {
 }
 
 model SiteSettings {
-  id          Int      @id @default(1)
-  headerTitle String   @default("DAUYS")
-  footerText  String   @default("© 2026 DAUYS. All rights reserved.")
-  heroTitle   String   @default("Experience True Sound")
-  heroDesc    String   @default("Premium audio speakers designed for audiophiles.")
-  updatedAt   DateTime @updatedAt
+  id            Int      @id @default(1)
+  headerTitle   String   @default("DAUYS")
+  footerText    String   @default("© 2026 DAUYS. All rights reserved.")
+  footerTextKk  String?
+  heroTitle     String   @default("Experience True Sound")
+  heroTitleKk   String?
+  heroDesc      String   @default("Premium audio speakers designed for audiophiles.")
+  heroDescKk    String?
+  updatedAt     DateTime @updatedAt
 }
