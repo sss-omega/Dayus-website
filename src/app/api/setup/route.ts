@@ -4,40 +4,15 @@ import path from "path";
 import prisma from "@/lib/prisma";
 
 export async function GET() {
-  const srcDir = '/home/ali/Downloads/Telegram Desktop/Рекламные фото/2025.04.18 (Микрофоны)';
   const destDir = path.join(process.cwd(), 'public', 'microphones');
 
   try {
-    // 1. Create destination folder if not exists
+    // Ensure destination folder exists
     if (!fs.existsSync(destDir)) {
       fs.mkdirSync(destDir, { recursive: true });
     }
 
-    // 2. Read source folder
-    if (!fs.existsSync(srcDir)) {
-      return NextResponse.json({ 
-        success: false, 
-        error: `Source directory does not exist: ${srcDir}` 
-      }, { status: 400 });
-    }
-
-    const files = fs.readdirSync(srcDir);
-    const imageFiles = files.filter(file => {
-      const ext = path.extname(file).toLowerCase();
-      return ext === '.jpg' || ext === '.jpeg' || ext === '.png';
-    });
-
-    // 3. Copy files
-    let copyCount = 0;
-    imageFiles.forEach(file => {
-      const srcPath = path.join(srcDir, file);
-      const destPath = path.join(destDir, file);
-      fs.copyFileSync(srcPath, destPath);
-      copyCount++;
-    });
-
-    // 4. Create Category "Микрофоны" / "Микрофондар"
-    // Let's check if Category already exists
+    // Ensure Category "Микрофоны" exists
     let category = await prisma.category.findUnique({
       where: { name: "Микрофоны" }
     });
@@ -48,112 +23,124 @@ export async function GET() {
       });
     }
 
-    // 5. Seed products
-    // We will generate different names and descriptions for microphones to make it look highly professional
-    const micNames = [
-      "DAUYS Vocal Pro X",
-      "DAUYS Studio Master 800",
-      "DAUYS Wireless Duo-Stage",
-      "DAUYS Broadcast Elite",
-      "DAUYS Podcast Creator",
-      "DAUYS Lav-Pro Wireless",
-      "DAUYS Instrument Ribbon",
-      "DAUYS Condenser Classic",
-      "DAUYS Dynamic Stage-1",
-      "DAUYS Field Recorder Mic"
-    ];
-
-    const descriptionsRu = [
-      "Профессиональный вокальный микрофон премиум-класса с кристально чистым звучанием.",
-      "Студийный конденсаторный микрофон с большой диафрагмой для записи вокала и инструментов.",
-      "Двухканальная беспроводная радиосистема для сцены и презентаций.",
-      "Микрофон вещательного качества для радиовещания и озвучивания.",
-      "USB-микрофон для подкастов и стриминга с регулировкой чувствительности.",
-      "Беспроводной петличный микрофон высокой четкости для блогеров и интервью.",
-      "Ленточный микрофон с теплым винтажным звуком для акустических инструментов.",
-      "Классический студийный микрофон с кардиоидной диаграммой направленности.",
-      "Динамический сценический микрофон с высокой устойчивостью к обратной связи.",
-      "Репортерский микрофон для качественной записи в полевых условиях."
-    ];
-
-    const descriptionsKk = [
-      "Кристалдай таза дыбысы бар премиум-класты кәсіби вокалдық микрофон.",
-      "Вокал мен аспаптарды жазуға арналған үлкен диафрагмалы студиялық конденсаторлық микрофон.",
-      "Сахна мен презентацияларға арналған екі арналы сымсыз радиожүйе.",
-      "Радиохабар тарату және дыбыстау үшін хабар тарату сапасындағы микрофон.",
-      "Сезімталдығы реттелетін подкасттар мен стримингке арналған USB микрофоны.",
-      "Блогерлер мен сұхбаттарға арналған жоғары дәлдіктегі сымсыз ілмекті микрофон.",
-      "Акустикалық аспаптарға арналған жылы винтажды дыбысы бар таспалы микрофон.",
-      "Кардиоидты бағыты бар классикалық студиялық микрофон.",
-      "Кері байланысқа жоғары тұрақтылығы бар динамикалық сахналық микрофон.",
-      "Далалық жағдайда сапалы жазуға арналған репортерлық микрофон."
-    ];
-
-    // Delete existing products under "Микрофоны" category to prevent duplication on multiple seed runs
+    // Clear existing products under "Микрофоны" category to prevent duplication
     await prisma.product.deleteMany({
       where: { categoryId: category.id }
     });
 
-    let seedCount = 0;
-    const productsData = [];
+    // Seed 1: DAUYS D-ONE Handheld
+    const descHandheld = JSON.stringify({
+      ru: "Цифровая беспроводная микрофонная система DAUYS D-ONE Handheld с двумя портативными ручными микрофонами (передатчиками) обеспечивает исключительную четкость звука, прочность и надежность. Разнесенные антенны приемника гарантируют отсутствие мертвых зон в рабочей зоне до 80 метров. Идеально подходит для вокала, караоке-залов, сцены и профессиональных инсталляций. Оснащена трехцветным ЖК-дисплеем с интуитивно понятным меню, технологией автоматической синхронизации 2.4G и работой от литиевых аккумуляторов 18650 со сроком службы более 8 часов.",
+      kk: "Екі портативті қол микрофоны (таратқышы) бар DAUYS D-ONE Handheld цифрлық сымсыз микрофон жүйесі дыбыстың ерекше анықтығын, беріктігін және сенімділігін қамтамасыз етеді. Қабылдағыштың әртараптандырылған антенналары 80 метрге дейінгі жұмыс аймағында өлі нүктелердің болмауына кепілдік береді. Вокал, караоке залы, сахна және кәсіби қондырғылар үшін тамаша таңдау. Ыңғайлы менюі бар үш түсті СКД дисплейімен, 2.4G автоматты синхрондау технологиясымен және 8 сағаттан астам жұмыс істейтін 18650 литий аккумуляторларымен жабдықталған."
+    });
 
-    for (let i = 0; i < imageFiles.length; i++) {
-      const filename = imageFiles[i];
-      const nameIdx = i % micNames.length;
-      const micNum = i + 1;
-      const name = `${micNames[nameIdx]} (Модель #${micNum})`;
-      
-      // Use Russian as default description in DB, we can handle dynamic translation or support multi-language description
-      // Since schema doesn't have localized description, we can store a combined JSON or just Russian description,
-      // and dynamically translate/adapt, or store Russian, or use our translation object.
-      // Let's store a combined description or a structured description, or just store a clean description.
-      // Actually, we can store Russian description and localize dynamically or store both in description.
-      // Let's store Russian description. We can also make the code details page display bilingual or support translations.
-      // Let's store: "RU: " + descriptionsRu[nameIdx] + " | KK: " + descriptionsKk[nameIdx]
-      // Wait, let's store it as:
-      const combinedDescription = JSON.stringify({
-        ru: `${descriptionsRu[nameIdx]} Отличный выбор для профессионалов и любителей качественного звука.`,
-        kk: `${descriptionsKk[nameIdx]} Кәсіби мамандар мен сапалы дыбысты ұнататындар үшін тамаша таңдау.`
-      });
+    const specsHandheldRu = [
+      "Тип устройства: Цифровая беспроводная система с ручными микрофонами",
+      "Несущая частота: UHF (УВЧ)",
+      "Динамический диапазон: >96 дБ",
+      "Частотный диапазон: 40 Гц - 18 кГц / ±1 дБ",
+      "Общее гармоническое искажение: <0.1%",
+      "Синхронизация частоты: Автоматическая 2.4G",
+      "Дальность работы: до 80 метров",
+      "Батарея передатчика: Литиевый аккумулятор 18650 (3.7 В)",
+      "Время автономной работы: более 8 часов",
+      "Выходы приемника: 1 x 6.3 мм MIX OUT, 2 x XLR балансных"
+    ].join("\n");
 
-      const price = 45000 + (i * 12500) % 150000; // Generate realistic prices: 45,000 - 195,000 KZT
+    const specsHandheldKk = [
+      "Құрылғы түрі: Қол микрофондары бар цифрлық сымсыз жүйе",
+      "Тасымалдаушы жиілігі: UHF (УВЧ)",
+      "Динамикалық диапазон: >96 дБ",
+      "Жиілік диапазоны: 40 Гц - 18 кГц / ±1 дБ",
+      "Жалпы гармоникалық бұрмалану: <0.1%",
+      "Жиілікті синхрондау: Автоматты 2.4G",
+      "Жұмыс қашықтығы: 80 метрге дейін",
+      "Таратқыш батареясы: Литий аккумуляторы 18650 (3.7 В)",
+      "Автономды жұмыс уақыты: 8 сағаттан астам",
+      "Қабылдағыш шығыстары: 1 x 6.3 мм MIX OUT, 2 x XLR теңгерімді"
+    ].join("\n");
 
-      const product = await prisma.product.create({
-        data: {
-          name,
-          description: combinedDescription,
-          price,
-          imageUrl: `/microphones/${filename}`,
-          kaspiLink: "https://kaspi.kz/shop/",
-          categoryId: category.id
-        }
-      });
-      productsData.push(product);
-      seedCount++;
-    }
+    await prisma.product.create({
+      data: {
+        name: "DAUYS D-ONE Handheld",
+        description: descHandheld,
+        price: 245000,
+        imageUrl: "/microphones/20250419084630_v2.jpg",
+        kaspiLink: "https://kaspi.kz/shop/search/?q=DAUYS%20D-ONE",
+        specsRu: specsHandheldRu,
+        specsKk: specsHandheldKk,
+        categoryId: category.id
+      }
+    });
 
-    // Update settings copyright and hero text to Russian/Kazakh and ensure high quality
+    // Seed 2: DAUYS D-ONE Beltpack
+    const descBeltpack = JSON.stringify({
+      ru: "Цифровая беспроводная микрофонная система DAUYS D-ONE Beltpack с поясным передатчиком, гарнитурой и петличным микрофоном. Данная система разработана для использования в профессиональных презентациях, телевещании, театрах и живых выступлениях. Схемы разнесения антенн гарантируют отсутствие мертвых зон в рабочей зоне до 80 метров. OLED-экран передатчика отображает рабочую частоту, заряд литиевого аккумулятора 18650 и уровень сигнала. Возможно подключение электрогитары, гарнитурного или петличного микрофона.",
+      kk: "Белдік таратқышы, гарнитурасы және ілмекті микрофоны бар DAUYS D-ONE Beltpack цифрлық сымсыз микрофон жүйесі. Бұл жүйе кәсіби презентацияларда, теледидарда, театрларда және жанды өнер көрсетулерде қолдануға арналған. Қабылдағыштың әртараптандырылған антенналары 80 метрге дейінгі жұмыс аймағында өлі нүктелердің болмауына кепілдік береді. Таратқыштың OLED экраны жұмыс жиілігін, 18650 литий аккумуляторының зарядын және сигнал деңгейін көрсетеді. Электр гитарасын, гарнитураны немесе ілмекті микрофонды қосуға болады."
+    });
+
+    const specsBeltpackRu = [
+      "Тип устройства: Цифровая беспроводная система с поясным передатчиком",
+      "Комплектация: Поясной передатчик, петличный микрофон, головная гарнитура",
+      "Несущая частота: UHF (УВЧ)",
+      "Динамический диапазон: >96 дБ",
+      "Частотный диапазон: 40 Гц - 18 кГц / ±1 дБ",
+      "Подключение инструментов: Поддержка электрогитары",
+      "Синхронизация частоты: Автоматическая 2.4G",
+      "Дальность работы: до 80 метров",
+      "Батарея передатчика: Литиевый аккумулятор 18650 (3.7 В)",
+      "Время автономной работы: более 8 часов",
+      "Выходы приемника: 1 x 6.3 мм MIX OUT, 2 x XLR балансных"
+    ].join("\n");
+
+    const specsBeltpackKk = [
+      "Құрылғы түрі: Белдік таратқышы бар цифрлық сымсыз жүйе",
+      "Жиынтықтау: Белдік таратқыш, ілмекті микрофон, бас гарнитурасы",
+      "Тасымалдаушы жиілігі: UHF (УВЧ)",
+      "Динамикалық диапазон: >96 дБ",
+      "Жиілік диапазоны: 40 Гц - 18 кГц / ±1 дБ",
+      "Аспаптарды қосу: Электр гитарасын қолдау",
+      "Жиілікті синхрондау: Автоматты 2.4G",
+      "Жұмыс қашықтығы: 80 метрге дейін",
+      "Таратқыш батареясы: Литий аккумуляторы 18650 (3.7 В)",
+      "Автономды жұмыс уақыты: 8 сағаттан астам",
+      "Қабылдағыш шығыстары: 1 x 6.3 мм MIX OUT, 2 x XLR теңгерімді"
+    ].join("\n");
+
+    await prisma.product.create({
+      data: {
+        name: "DAUYS D-ONE Beltpack",
+        description: descBeltpack,
+        price: 265000,
+        imageUrl: "/microphones/20250419084620_v2.jpg",
+        kaspiLink: "https://kaspi.kz/shop/search/?q=DAUYS%20D-ONE",
+        specsRu: specsBeltpackRu,
+        specsKk: specsBeltpackKk,
+        categoryId: category.id
+      }
+    });
+
+    // Update settings copyright and hero text
     await prisma.siteSettings.upsert({
       where: { id: 1 },
       update: {
         headerTitle: "DAUYS",
         footerText: "© 2026 DAUYS. Барлық құқықтар қорғалған. | Все права защищены.",
         heroTitle: "Шынайы Дыбыс Әлемі",
-        heroDesc: "Аудиофилдерге арналған премиум микрофондар мен акустикалық жүйелер. Кристалды таза дыбысты бүгін сезініңіз."
+        heroDesc: "Кәсіби вокалдық және сахналық микрофондар жүйесі. Кристалды таза дыбысты бүгін сезініңіз."
       },
       create: {
         id: 1,
         headerTitle: "DAUYS",
         footerText: "© 2026 DAUYS. Барлық құқықтар қорғалған. | Все права защищены.",
         heroTitle: "Шынайы Дыбыс Әлемі",
-        heroDesc: "Аудиофилдерге арналған премиум микрофондар мен акустикалық жүйелер. Кристалды таза дыбысты бүгін сезініңіз."
+        heroDesc: "Кәсіби вокалдық және сахналық микрофондар жүйесі. Кристалды таза дыбысты бүгін сезініңіз."
       }
     });
 
     return NextResponse.json({
       success: true,
-      copiedImages: copyCount,
-      seededProducts: seedCount,
+      seededProducts: 2,
       message: "Microphone setup and seeding completed successfully!"
     });
 

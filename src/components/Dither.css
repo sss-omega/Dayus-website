@@ -3,3 +3,18 @@
   height: 100%;
   position: relative;
 }
+
+.dither-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.dither-fallback-bg {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 30%, #151108 0%, #050505 100%);
+}

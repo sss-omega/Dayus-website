@@ -22,6 +22,7 @@ void main() {
 
 const waveFragmentShader = `
 precision highp float;
+varying vec2 vUv;
 uniform vec2 resolution;
 uniform float time;
 uniform float waveSpeed;
@@ -65,7 +66,7 @@ float cnoise(vec2 P) {
   return 2.3 * mix(n_x.x, n_x.y, fade_xy.y);
 }
 
-const int OCTAVES = 4;
+const int OCTAVES = 3; // Reduced from 4 to 3 for better math performance
 float fbm(vec2 p) {
   float value = 0.0;
   float amp = 1.0;
@@ -303,21 +304,46 @@ export default function Dither({
   mouseRadius = 1
 }: DitherProps) {
   const [mounted, setMounted] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [hasWebGL, setHasWebGL] = React.useState(true);
 
   React.useEffect(() => {
     setMounted(true);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    // Detect WebGL availability
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        setHasWebGL(false);
+      }
+    } catch (_e) {
+      setHasWebGL(false);
+    }
+
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   if (!mounted) {
     return <div className="dither-container" style={{ background: '#050505' }}></div>;
   }
 
+  // Optimize: Disable Three.js completely on mobile or if WebGL is unsupported, use lightweight CSS fallback
+  if (isMobile || !hasWebGL) {
+    return <div className="dither-fallback-bg" style={{ background: '#050505' }}></div>;
+  }
+
   return (
     <Canvas
       className="dither-container"
       camera={{ position: [0, 0, 6] }}
-      dpr={1}
-      gl={{ antialias: true, preserveDrawingBuffer: true }}
+      dpr={0.2} // Optimized: Render at 1/5th resolution and let CSS upscale it (crisp-edges)
+      gl={{ antialias: false, preserveDrawingBuffer: false }} // Optimized: Disable antialiasing
     >
       <DitheredWaves
         waveSpeed={waveSpeed}

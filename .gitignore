@@ -36,3 +36,11 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# Sensitive information
+.env
+deploy*.sh
+run_remote.sh
+scripts/create-admin.ts
+.github/workflows/deploy.yml
+standalone.zip

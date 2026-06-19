@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#151515" />
+      <stop offset="100%" stop-color="#050505" />
+    </radialGradient>
+
+    <!-- Tower Cabinet Wood/Metal finish -->
+    <linearGradient id="towerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2a2a2a" />
+      <stop offset="15%" stop-color="#181818" />
+      <stop offset="50%" stop-color="#0e0e0e" />
+      <stop offset="85%" stop-color="#181818" />
+      <stop offset="100%" stop-color="#2a2a2a" />
+    </linearGradient>
+
+    <!-- Cone Accent Color (Gold/Yellow) -->
+    <radialGradient id="coneGrad" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#ffea00" />
+      <stop offset="60%" stop-color="#cc9900" />
+      <stop offset="100%" stop-color="#664400" />
+    </radialGradient>
+    
+    <radialGradient id="dustCapGrad" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#444444" />
+      <stop offset="100%" stop-color="#111111" />
+    </radialGradient>
+
+    <linearGradient id="tweeterGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00ffff" />
+      <stop offset="100%" stop-color="#0066aa" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGlow)" rx="16" />
+
+  <!-- Speaker Tower Shadow -->
+  <ellipse cx="250" cy="460" rx="90" ry="12" fill="#000" opacity="0.6" filter="blur(6px)" />
+
+  <!-- Tower Cabinet -->
+  <rect x="180" y="50" width="140" height="390" rx="6" fill="url(#towerGrad)" stroke="#ffcc00" stroke-width="1" stroke-opacity="0.2" />
+  
+  <!-- Outer metallic border face -->
+  <rect x="186" y="56" width="128" height="378" rx="4" fill="#0c0c0c" />
+
+  <!-- Premium Spike feet -->
+  <path d="M 190 440 L 175 455 L 185 455 Z" fill="#444" />
+  <path d="M 310 440 L 325 455 L 315 455 Z" fill="#444" />
+  <circle cx="175" cy="455" r="2" fill="#ffcc00" />
+  <circle cx="325" cy="455" r="2" fill="#ffcc00" />
+
+  <!-- Titanium Tweeter (Top) -->
+  <g transform="translate(250, 105)">
+    <circle cx="0" cy="0" r="24" fill="#151515" stroke="#333" stroke-width="1.5" />
+    <!-- Outer metal ring bolts -->
+    <circle cx="0" cy="-18" r="1.5" fill="#666" />
+    <circle cx="18" cy="0" r="1.5" fill="#666" />
+    <circle cx="0" cy="18" r="1.5" fill="#666" />
+    <circle cx="-18" cy="0" r="1.5" fill="#666" />
+    
+    <!-- Tweeter Dome -->
+    <circle cx="0" cy="0" r="12" fill="url(#tweeterGlow)" stroke="#004488" stroke-width="1" />
+    <circle cx="-3" cy="-3" r="3" fill="#fff" opacity="0.4" />
+  </g>
+
+  <!-- Midrange Driver (Middle) -->
+  <g transform="translate(250, 190)">
+    <!-- Outer Basket Ring -->
+    <circle cx="0" cy="0" r="42" fill="#1a1a1a" stroke="#2b2b2b" stroke-width="2" />
+    <!-- Surround roll -->
+    <circle cx="0" cy="0" r="37" fill="none" stroke="#0c0c0c" stroke-width="4" />
+    <!-- Gold Cone -->
+    <circle cx="0" cy="0" r="35" fill="url(#coneGrad)" />
+    <!-- Center Dust Cap -->
+    <circle cx="0" cy="0" r="11" fill="url(#dustCapGrad)" stroke="#000" stroke-width="1" />
+    <!-- Highlight -->
+    <path d="M -22 -10 A 25 25 0 0 1 -10 -22" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.3" stroke-linecap="round" />
+  </g>
+
+  <!-- Woofer 1 (Bottom-Mid) -->
+  <g transform="translate(250, 290)">
+    <!-- Outer Basket Ring -->
+    <circle cx="0" cy="0" r="46" fill="#1a1a1a" stroke="#2b2b2b" stroke-width="2" />
+    <!-- Surround roll -->
+    <circle cx="0" cy="0" r="41" fill="none" stroke="#0c0c0c" stroke-width="5" />
+    <!-- Gold Cone -->
+    <circle cx="0" cy="0" r="39" fill="url(#coneGrad)" />
+    <!-- Center Dust Cap -->
+    <circle cx="0" cy="0" r="13" fill="url(#dustCapGrad)" stroke="#000" stroke-width="1" />
+    <!-- Highlight -->
+    <path d="M -26 -12 A 28 28 0 0 1 -12 -26" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.3" stroke-linecap="round" />
+  </g>
+
+  <!-- Woofer 2 (Bottom) -->
+  <g transform="translate(250, 385)">
+    <!-- Outer Basket Ring -->
+    <circle cx="0" cy="0" r="46" fill="#1a1a1a" stroke="#2b2b2b" stroke-width="2" />
+    <!-- Surround roll -->
+    <circle cx="0" cy="0" r="41" fill="none" stroke="#0c0c0c" stroke-width="5" />
+    <!-- Gold Cone -->
+    <circle cx="0" cy="0" r="39" fill="url(#coneGrad)" />
+    <!-- Center Dust Cap -->
+    <circle cx="0" cy="0" r="13" fill="url(#dustCapGrad)" stroke="#000" stroke-width="1" />
+    <!-- Highlight -->
+    <path d="M -26 -12 A 28 28 0 0 1 -12 -26" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.3" stroke-linecap="round" />
+  </g>
+</svg>

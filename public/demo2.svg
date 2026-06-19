@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#151515" />
+      <stop offset="100%" stop-color="#050505" />
+    </radialGradient>
+
+    <!-- Cabinet Wood Finish -->
+    <linearGradient id="cabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3a2a1a" />
+      <stop offset="50%" stop-color="#1a120a" />
+      <stop offset="100%" stop-color="#0c0704" />
+    </linearGradient>
+
+    <!-- Cone Accent Color (Gold/Yellow) -->
+    <radialGradient id="coneGrad" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#ffea00" />
+      <stop offset="60%" stop-color="#cc9900" />
+      <stop offset="100%" stop-color="#664400" />
+    </radialGradient>
+    
+    <radialGradient id="dustCapGrad" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#444444" />
+      <stop offset="100%" stop-color="#111111" />
+    </radialGradient>
+
+    <linearGradient id="tweeterGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00ffff" />
+      <stop offset="100%" stop-color="#0066aa" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGlow)" rx="16" />
+
+  <!-- Speaker Shadow -->
+  <ellipse cx="250" cy="420" rx="120" ry="16" fill="#000" opacity="0.6" filter="blur(6px)" />
+
+  <!-- Cabinet Body -->
+  <rect x="150" y="80" width="200" height="310" rx="8" fill="url(#cabGrad)" stroke="#ffcc00" stroke-width="1.5" stroke-opacity="0.25" />
+  
+  <!-- Outer metallic border face -->
+  <rect x="160" y="90" width="180" height="290" rx="6" fill="#0c0c0c" />
+
+  <!-- Titanium Tweeter (Top) -->
+  <g transform="translate(250, 160)">
+    <circle cx="0" cy="0" r="30" fill="#151515" stroke="#333" stroke-width="1.5" />
+    <!-- Outer metal ring bolts -->
+    <circle cx="0" cy="-24" r="1.5" fill="#666" />
+    <circle cx="24" cy="0" r="1.5" fill="#666" />
+    <circle cx="0" cy="24" r="1.5" fill="#666" />
+    <circle cx="-24" cy="0" r="1.5" fill="#666" />
+    
+    <!-- Tweeter Dome -->
+    <circle cx="0" cy="0" r="15" fill="url(#tweeterGlow)" stroke="#004488" stroke-width="1" />
+    <circle cx="-4" cy="-4" r="4" fill="#fff" opacity="0.4" />
+  </g>
+
+  <!-- Bookshelf Woofer (Bottom) -->
+  <g transform="translate(250, 285)">
+    <!-- Outer Basket Ring -->
+    <circle cx="0" cy="0" r="56" fill="#1a1a1a" stroke="#2b2b2b" stroke-width="2" />
+    <!-- Surround roll -->
+    <circle cx="0" cy="0" r="50" fill="none" stroke="#0c0c0c" stroke-width="6" />
+    <!-- Gold Cone -->
+    <circle cx="0" cy="0" r="47" fill="url(#coneGrad)" />
+    <!-- Center Dust Cap -->
+    <circle cx="0" cy="0" r="15" fill="url(#dustCapGrad)" stroke="#000" stroke-width="1" />
+    <!-- Highlight -->
+    <path d="M -30 -15 A 33 33 0 0 1 -15 -30" fill="none" stroke="#fff" stroke-width="2" opacity="0.3" stroke-linecap="round" />
+  </g>
+
+  <!-- Bass Port (Very Bottom Center) -->
+  <circle cx="250" cy="360" r="8" fill="#000" stroke="#1f1f1f" stroke-width="1.5" />
+  <circle cx="250" cy="360" r="6" fill="#020202" />
+</svg>

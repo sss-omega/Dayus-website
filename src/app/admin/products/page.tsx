@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import GlitchText from "@/components/GlitchText";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import ProductFormWithPreview from "@/components/admin/ProductFormWithPreview";
 
 export const dynamic = 'force-dynamic';
 
@@ -208,61 +209,35 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
         </div>
       )}
       
-      {/* Create Product Form */}
-      <div className="admin-form" style={{ background: 'rgba(20, 20, 20, 0.45)', border: '1px solid var(--border-color)', backdropFilter: 'blur(15px)', marginBottom: '40px' }}>
-        <h3 style={{ marginBottom: "20px", color: "#fff", fontWeight: 700 }}>{t.addNewProduct}</h3>
+      {/* Create Product Form with Live Preview */}
+      <div style={{ marginBottom: '40px' }}>
         {categories.length === 0 ? (
-          <p style={{ color: "#ff3366", fontWeight: 600 }}>
-            {locale === "kk" ? "Алдымен санат жасаңыз." : "Сначала создайте категорию."}
-          </p>
+          <div className="admin-form" style={{ background: 'rgba(20, 20, 20, 0.45)', border: '1px solid var(--border-color)', padding: '30px', borderRadius: '16px' }}>
+            <p style={{ color: "#ff3366", fontWeight: 600 }}>
+              {locale === "kk" ? "Алдымен санат жасаңыз." : "Сначала создайте категорию."}
+            </p>
+          </div>
         ) : (
-          <form action={handleProduct} className="grid-form" encType="multipart/form-data">
-            <input type="hidden" name="action" value="create" />
-            <div className="form-group">
-              <label>{t.category}</label>
-              <select name="categoryId" className="form-control" required>
-                <option value="">{t.selectCategory}</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>{t.productName}</label>
-              <input type="text" name="name" className="form-control" required placeholder={locale === "kk" ? "мысалы, Shure SM7B" : "например, Shure SM7B"} />
-            </div>
-            <div className="form-group">
-              <label>{t.price}</label>
-              <input type="number" name="price" className="form-control" placeholder={locale === "kk" ? "мысалы, 250000" : "например, 250000"} />
-            </div>
-            <div className="form-group">
-              <label>{t.uploadPhoto}</label>
-              <input type="file" name="imageFile" accept="image/*" className="form-control" required style={{ paddingTop: '8px' }} />
-            </div>
-            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label>{t.descRu}</label>
-              <textarea name="descriptionRu" className="form-control" rows={3} required placeholder="Описание микрофона на русском языке..."></textarea>
-            </div>
-            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label>{t.descKk}</label>
-              <textarea name="descriptionKk" className="form-control" rows={3} required placeholder="Микрофонның қазақ тіліндегі сипаттамасы..."></textarea>
-            </div>
-            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label>{t.specsRu}</label>
-              <textarea name="specsRu" className="form-control" rows={4} placeholder={translations.ru.specsPlaceholder} style={{ resize: 'vertical' }}></textarea>
-            </div>
-            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label>{t.specsKk}</label>
-              <textarea name="specsKk" className="form-control" rows={4} placeholder={translations.kk.specsPlaceholder} style={{ resize: 'vertical' }}></textarea>
-            </div>
-            <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-              <label>{t.kaspiLink}</label>
-              <input type="url" name="kaspiLink" className="form-control" placeholder="https://kaspi.kz/shop/..." />
-            </div>
-            <div style={{ gridColumn: '1 / -1' }}>
-              <button type="submit" className="btn-primary" style={{ padding: '12px 24px', borderRadius: '10px' }}>{t.addProduct}</button>
-            </div>
-          </form>
+          <ProductFormWithPreview
+            categories={categories}
+            actionUrl={handleProduct}
+            locale={locale}
+            t={{
+              category: t.category,
+              selectCategory: t.selectCategory,
+              productName: t.productName,
+              price: t.price,
+              uploadPhoto: t.uploadPhoto,
+              descRu: t.descRu,
+              descKk: t.descKk,
+              specsRu: t.specsRu,
+              specsKk: t.specsKk,
+              specsPlaceholder: t.specsPlaceholder,
+              kaspiLink: t.kaspiLink,
+              addProduct: t.addNewProduct,
+              noImage: t.noImage
+            }}
+          />
         )}
       </div>
 

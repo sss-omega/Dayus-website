@@ -1,5 +1,54 @@
-.darkveil-canvas {
+.darkveil-container-css {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  display: block;
+  overflow: hidden;
+  background: #0a0805;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.darkveil-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(250, 184, 71, 0.12) 0%,
+    rgba(217, 82, 20, 0.09) 35%,
+    rgba(89, 20, 5, 0.06) 70%,
+    transparent 100%
+  );
+  animation: rotateGlow 25s linear infinite;
+  mix-blend-mode: screen;
+}
+
+.darkveil-glow-2 {
+  position: absolute;
+  bottom: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 70% 70%,
+    rgba(250, 184, 71, 0.08) 0%,
+    rgba(89, 20, 5, 0.12) 40%,
+    transparent 100%
+  );
+  animation: rotateGlowReverse 35s linear infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes rotateGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotateGlowReverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
 }

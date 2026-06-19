@@ -3,71 +3,32 @@ import path from "path";
 import prisma from "@/lib/prisma";
 
 export async function runSetupIfNeeded() {
-  const srcDir = '/home/ali/Downloads/Telegram Desktop/Рекламные фото/2025.04.18 (Микрофоны)';
   const destDir = path.join(process.cwd(), 'public', 'microphones');
 
   try {
-    // Check if category "Микрофоны" already exists and has products
+    // Check if category "Микрофоны" exists and has exactly 2 products
     const existingCategory = await prisma.category.findUnique({
       where: { name: "Микрофоны" },
       include: { _count: { select: { products: true } } }
     });
 
-    const hasProducts = existingCategory && existingCategory._count.products > 0;
+    const productCount = existingCategory ? existingCategory._count.products : 0;
     const destExists = fs.existsSync(destDir);
     const destFilesCount = destExists ? fs.readdirSync(destDir).length : 0;
 
-    // If we already have seeded products and copied files, skip setup to maintain high performance
-    if (hasProducts && destFilesCount > 0) {
+    // Skip if exactly 2 products are seeded and images exist
+    if (productCount === 2 && destFilesCount > 0) {
       return { success: true, message: "Setup already completed previously." };
     }
 
-    console.log("Starting automatic setup and seed for microphones...");
+    console.log("Starting setup and seed for exactly 2 premium DAUYS D-ONE products...");
 
-    // 1. Create destination directory if not exists
+    // Ensure destination directory exists
     if (!fs.existsSync(destDir)) {
       fs.mkdirSync(destDir, { recursive: true });
     }
 
-    // 2. Scan destination directory for already copied files
-    let imageFiles = fs.readdirSync(destDir).filter(file => {
-      const ext = path.extname(file).toLowerCase();
-      return ext === '.jpg' || ext === '.jpeg' || ext === '.png';
-    });
-
-    let copyCount = 0;
-
-    // 3. If destination directory is empty, try to copy from source
-    if (imageFiles.length === 0) {
-      if (!fs.existsSync(srcDir)) {
-        console.warn(`Source directory not found: ${srcDir} and public/microphones is empty. Skipping.`);
-        return { success: false, error: "No images found." };
-      }
-
-      console.log(`Copying images from host source: ${srcDir}...`);
-      const files = fs.readdirSync(srcDir);
-      const hostImageFiles = files.filter(file => {
-        const ext = path.extname(file).toLowerCase();
-        return ext === '.jpg' || ext === '.jpeg' || ext === '.png';
-      });
-
-      hostImageFiles.forEach(file => {
-        const srcPath = path.join(srcDir, file);
-        const destPath = path.join(destDir, file);
-        fs.copyFileSync(srcPath, destPath);
-        imageFiles.push(file);
-        copyCount++;
-      });
-    } else {
-      console.log(`Found ${imageFiles.length} images already in public/microphones.`);
-    }
-
-    if (imageFiles.length === 0) {
-      console.warn("No images found to seed.");
-      return { success: false, error: "No images found." };
-    }
-
-    // 5. Ensure "Микрофоны" category exists
+    // Ensure category "Микрофоны" exists
     let category = await prisma.category.findUnique({
       where: { name: "Микрофоны" }
     });
@@ -78,75 +39,102 @@ export async function runSetupIfNeeded() {
       });
     }
 
-    // 6. Seed products
-    const micNames = [
-      "DAUYS Vocal Pro X",
-      "DAUYS Studio Master 800",
-      "DAUYS Wireless Duo-Stage",
-      "DAUYS Broadcast Elite",
-      "DAUYS Podcast Creator",
-      "DAUYS Lav-Pro Wireless",
-      "DAUYS Instrument Ribbon",
-      "DAUYS Condenser Classic",
-      "DAUYS Dynamic Stage-1",
-      "DAUYS Field Recorder Mic"
-    ];
-
-    const descriptionsRu = [
-      "Профессиональный вокальный микрофон премиум-класса с кристально чистым звучанием.",
-      "Студийный конденсаторный микрофон с большой диафрагмой для записи вокала и инструментов.",
-      "Двухканальная беспроводная радиосистема для сцены и презентаций.",
-      "Микрофон вещательного качества для радиовещания и озвучивания.",
-      "USB-микрофон для подкастов и стриминга с регулировкой чувствительности.",
-      "Беспроводной петличный микрофон высокой четкости для блогеров и интервью.",
-      "Ленточный микрофон с теплым винтажным звуком для акустических инструментов.",
-      "Классический студийный микрофон с кардиоидной диаграммой направленности.",
-      "Динамический сценический микрофон с высокой устойчивостью к обратной связи.",
-      "Репортерский микрофон для качественной записи в полевых условиях."
-    ];
-
-    const descriptionsKk = [
-      "Кристалдай таза дыбысы бар премиум-класты кәсіби вокалдық микрофон.",
-      "Вокал мен аспаптарды жазуға арналған үлкен диафрагмалы студиялық конденсаторлық микрофон.",
-      "Сахна мен презентацияларға арналған екі арналы сымсыз радиожүйе.",
-      "Радиохабар тарату және дыбыстау үшін хабар тарату сапасындағы микрофон.",
-      "Сезімталдығы реттелетін подкасттар мен стримингке арналған USB микрофоны.",
-      "Блогерлер мен сұхбаттарға арналған жоғары дәлдіктегі сымсыз ілмекті микрофон.",
-      "Акустикалық аспаптарға арналған жылы винтажды дыбысы бар таспалы микрофон.",
-      "Кардиоидты бағыты бар классикалық студиялық микрофон.",
-      "Кері байланысқа жоғары тұрақтылығы бар динамикалық сахналық микрофон.",
-      "Далалық жағдайда сапалы жазуға арналған репортерлық микрофон."
-    ];
-
-    // Clear existing products in "Микрофоны" category if we are running seed again
+    // Clear existing products in "Микрофоны" category to have exactly 2 products
     await prisma.product.deleteMany({
       where: { categoryId: category.id }
     });
 
-    for (let i = 0; i < imageFiles.length; i++) {
-      const filename = imageFiles[i];
-      const nameIdx = i % micNames.length;
-      const micNum = i + 1;
-      const name = `${micNames[nameIdx]} (Модель #${micNum})`;
-      
-      const combinedDescription = JSON.stringify({
-        ru: `${descriptionsRu[nameIdx]} Отличный выбор для профессионалов и любителей качественного звука.`,
-        kk: `${descriptionsKk[nameIdx]} Кәсіби мамандар мен сапалы дыбысты ұнататындар үшін тамаша таңдау.`
-      });
+    // Seed 1: DAUYS D-ONE Handheld
+    const descHandheld = JSON.stringify({
+      ru: "Цифровая беспроводная микрофонная система DAUYS D-ONE Handheld с двумя портативными ручными микрофонами (передатчиками) обеспечивает исключительную четкость звука, прочность и надежность. Разнесенные антенны приемника гарантируют отсутствие мертвых зон в рабочей зоне до 80 метров. Идеально подходит для вокала, караоке-залов, сцены и профессиональных инсталляций. Оснащена трехцветным ЖК-дисплеем с интуитивно понятным меню, технологией автоматической синхронизации 2.4G и работой от литиевых аккумуляторов 18650 со сроком службы более 8 часов.",
+      kk: "Екі портативті қол микрофоны (таратқышы) бар DAUYS D-ONE Handheld цифрлық сымсыз микрофон жүйесі дыбыстың ерекше анықтығын, беріктігін және сенімділігін қамтамасыз етеді. Қабылдағыштың әртараптандырылған антенналары 80 метрге дейінгі жұмыс аймағында өлі нүктелердің болмауына кепілдік береді. Вокал, караоке залы, сахна және кәсіби қондырғылар үшін тамаша таңдау. Ыңғайлы менюі бар үш түсті СКД дисплейімен, 2.4G автоматты синхрондау технологиясымен және 8 сағаттан астам жұмыс істейтін 18650 литий аккумуляторларымен жабдықталған."
+    });
 
-      const price = 45000 + (i * 12500) % 150000;
+    const specsHandheldRu = [
+      "Тип устройства: Цифровая беспроводная система с ручными микрофонами",
+      "Несущая частота: UHF (УВЧ)",
+      "Динамический диапазон: >96 дБ",
+      "Частотный диапазон: 40 Гц - 18 кГц / ±1 дБ",
+      "Общее гармоническое искажение: <0.1%",
+      "Синхронизация частоты: Автоматическая 2.4G",
+      "Дальность работы: до 80 метров",
+      "Батарея передатчика: Литиевый аккумулятор 18650 (3.7 В)",
+      "Время автономной работы: более 8 часов",
+      "Выходы приемника: 1 x 6.3 мм MIX OUT, 2 x XLR балансных"
+    ].join("\n");
 
-      await prisma.product.create({
-        data: {
-          name,
-          description: combinedDescription,
-          price,
-          imageUrl: `/microphones/${filename}`,
-          kaspiLink: "https://kaspi.kz/shop/",
-          categoryId: category.id
-        }
-      });
-    }
+    const specsHandheldKk = [
+      "Құрылғы түрі: Қол микрофондары бар цифрлық сымсыз жүйе",
+      "Тасымалдаушы жиілігі: UHF (УВЧ)",
+      "Динамикалық диапазон: >96 дБ",
+      "Жиілік диапазоны: 40 Гц - 18 кГц / ±1 дБ",
+      "Жалпы гармоникалық бұрмалану: <0.1%",
+      "Жиілікті синхрондау: Автоматты 2.4G",
+      "Жұмыс қашықтығы: 80 метрге дейін",
+      "Таратқыш батареясы: Литий аккумуляторы 18650 (3.7 В)",
+      "Автономды жұмыс уақыты: 8 сағаттан астам",
+      "Қабылдағыш шығыстары: 1 x 6.3 мм MIX OUT, 2 x XLR теңгерімді"
+    ].join("\n");
+
+    await prisma.product.create({
+      data: {
+        name: "DAUYS D-ONE Handheld",
+        description: descHandheld,
+        price: 245000,
+        imageUrl: "/microphones/20250419084620_v2.jpg",
+        kaspiLink: "https://kaspi.kz/shop/search/?q=DAUYS%20D-ONE",
+        specsRu: specsHandheldRu,
+        specsKk: specsHandheldKk,
+        categoryId: category.id
+      }
+    });
+
+    // Seed 2: DAUYS D-ONE Beltpack
+    const descBeltpack = JSON.stringify({
+      ru: "Цифровая беспроводная микрофонная система DAUYS D-ONE Beltpack с поясным передатчиком, гарнитурой и петличным микрофоном. Данная система разработана для использования в профессиональных презентациях, телевещании, театрах и живых выступлениях. Схемы разнесения антенн гарантируют отсутствие мертвых зон в рабочей зоне до 80 метров. OLED-экран передатчика отображает рабочую частоту, заряд литиевого аккумулятора 18650 и уровень сигнала. Возможно подключение электрогитары, гарнитурного или петличного микрофона.",
+      kk: "Белдік таратқышы, гарнитурасы және ілмекті микрофоны бар DAUYS D-ONE Beltpack цифрлық сымсыз микрофон жүйесі. Бұл жүйе кәсіби презентацияларда, теледидарда, театрларда және жанды өнер көрсетулерде қолдануға арналған. Қабылдағыштың әртараптандырылған антенналары 80 метрге дейінгі жұмыс аймағында өлі нүктелердің болмауына кепілдік береді. Таратқыштың OLED экраны жұмыс жиілігін, 18650 литий аккумуляторының зарядын және сигнал деңгейін көрсетеді. Электр гитарасын, гарнитураны немесе ілмекті микрофонды қосуға болады."
+    });
+
+    const specsBeltpackRu = [
+      "Тип устройства: Цифровая беспроводная система с поясным передатчиком",
+      "Комплектация: Поясной передатчик, петличный микрофон, головная гарнитура",
+      "Несущая частота: UHF (УВЧ)",
+      "Динамический диапазон: >96 дБ",
+      "Частотный диапазон: 40 Гц - 18 кГц / ±1 дБ",
+      "Подключение инструментов: Поддержка электрогитары",
+      "Синхронизация частоты: Автоматическая 2.4G",
+      "Дальность работы: до 80 метров",
+      "Батарея передатчика: Литиевый аккумулятор 18650 (3.7 В)",
+      "Время автономной работы: более 8 часов",
+      "Выходы приемника: 1 x 6.3 мм MIX OUT, 2 x XLR балансных"
+    ].join("\n");
+
+    const specsBeltpackKk = [
+      "Құрылғы түрі: Белдік таратқышы бар цифрлық сымсыз жүйе",
+      "Жиынтықтау: Белдік таратқыш, ілмекті микрофон, бас гарнитурасы",
+      "Тасымалдаушы жиілігі: UHF (УВЧ)",
+      "Динамикалық диапазон: >96 дБ",
+      "Жиілік диапазоны: 40 Гц - 18 кГц / ±1 дБ",
+      "Аспаптарды қосу: Электр гитарасын қолдау",
+      "Жиілікті синхрондау: Автоматты 2.4G",
+      "Жұмыс қашықтығы: 80 метрге дейін",
+      "Таратқыш батареясы: Литий аккумуляторы 18650 (3.7 В)",
+      "Автономды жұмыс уақыты: 8 сағаттан астам",
+      "Қабылдағыш шығыстары: 1 x 6.3 мм MIX OUT, 2 x XLR теңгерімді"
+    ].join("\n");
+
+    await prisma.product.create({
+      data: {
+        name: "DAUYS D-ONE Beltpack",
+        description: descBeltpack,
+        price: 265000,
+        imageUrl: "/microphones/20250419084630_v2.jpg",
+        kaspiLink: "https://kaspi.kz/shop/search/?q=DAUYS%20D-ONE",
+        specsRu: specsBeltpackRu,
+        specsKk: specsBeltpackKk,
+        categoryId: category.id
+      }
+    });
 
     // Set site settings defaults
     await prisma.siteSettings.upsert({
@@ -155,19 +143,51 @@ export async function runSetupIfNeeded() {
         headerTitle: "DAUYS",
         footerText: "© 2026 DAUYS. Барлық құқықтар қорғалған. | Все права защищены.",
         heroTitle: "Шынайы Дыбыс Әлемі",
-        heroDesc: "Аудиофилдерге арналған премиум микрофондар мен акустикалық жүйелер. Кристалды таза дыбысты бүгін сезініңіз."
+        heroDesc: "Кәсіби вокалдық және сахналық микрофондар жүйесі. Кристалды таза дыбысты бүгін сезініңіз."
       },
       create: {
         id: 1,
         headerTitle: "DAUYS",
         footerText: "© 2026 DAUYS. Барлық құқықтар қорғалған. | Все права защищены.",
         heroTitle: "Шынайы Дыбыс Әлемі",
-        heroDesc: "Аудиофилдерге арналған премиум микрофондар мен акустикалық жүйелер. Кристалды таза дыбысты бүгін сезініңіз."
+        heroDesc: "Кәсіби вокалдық және сахналық микрофондар жүйесі. Кристалды таза дыбысты бүгін сезініңіз."
       }
     });
 
-    console.log(`Successfully copied ${copyCount} images and seeded ${imageFiles.length} microphone products.`);
-    return { success: true, copied: copyCount, seeded: imageFiles.length };
+    // Seed AI Knowledge Base if empty
+    const knowledgeCount = await prisma.aiKnowledge.count();
+    if (knowledgeCount === 0) {
+      const defaultKnowledge = [
+        "ИНСТРУКЦИЯ ПО НАСТРОЙКЕ И ЭКСПЛУАТАЦИИ МИКРОФОНОВ DAUYS:",
+        "",
+        "1. Антенны приемника должны располагаться перпендикулярно корпусу приёмника, на расстоянии не менее 1 метра от стен и металлических поверхностей для лучшего приема.",
+        "2. Питание: используйте оригинальный сетевой адаптер 12V DC, подключив его к соответствующему разъему на задней панели приемника.",
+        "3. Подключение звука: используйте Jack 6.3 мм (разъем MIX OUT) для вывода смешанного сигнала на микшер или активную колонку. Для независимой раздельной регулировки каналов используйте XLR-разъемы A/B для подключения к балансным входам микшерного пульта.",
+        "4. Синхронизация передатчика с приемником:",
+        "   - Выключите передатчик (микрофон/поясной блок).",
+        "   - Выберите в меню приемника пункт «СОПРЯЖЕНИЕ» (PAIRING).",
+        "   - Включите передатчик, держа его на расстоянии до 20 метров от приёмника.",
+        "   - Дождитесь на дисплее сообщения «УСПЕШНАЯ СИНХРОНИЗАЦИЯ».",
+        "   - Функция «SKIP AUTO» позволяет автоматически подбирать свободную и чистую от помех частоту.",
+        "5. Управление параметрами звука:",
+        "   - Громкость: регулируется независимыми ручками A и B на передней панели приёмника.",
+        "   - Эхо (ECHO): кратким нажатием ручки громкости, настраивается в диапазоне от 1 до 100.",
+        "   - Задержка (DELAY): настраивается кнопками A/B в диапазоне от 1 до 100.",
+        "6. Тонкие настройки передатчика:",
+        "   - Усиление (GAIN): регулировка чувствительности от −10 до +10 дБ.",
+        "   - Мощность передачи (TX POW): три режима - H (высокая, до 80 метров), M (средняя), L (низкая).",
+        "   - Питание передатчиков: литиевый аккумулятор типа 18650 (3.7В), зарядка через встроенный порт Type-C, время работы более 8 часов."
+      ].join("\n");
+
+      await prisma.aiKnowledge.create({
+        data: {
+          content: defaultKnowledge
+        }
+      });
+    }
+
+    console.log("Successfully seeded 2 premium DAUYS D-ONE products.");
+    return { success: true, seeded: 2 };
 
   } catch (error) {
     console.error("Error running setup helper:", error);

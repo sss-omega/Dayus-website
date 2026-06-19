@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Microphone Gallery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      padding: 20px;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+    }
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      background-color: white;
+    }
+    .filename {
+      margin-top: 10px;
+      font-weight: bold;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h1>Microphone Images Gallery</h1>
+  <div class="gallery">
+    <!-- IMAGES_PLACEHOLDER -->
+  </div>
+
+  <script>
+    const images = [
+      "20250419084444.jpg",
+      "20250419084446.jpg",
+      "20250419084448.jpg",
+      "20250419084450.jpg",
+      "20250419084452.jpg",
+      "20250419084454.jpg",
+      "20250419084456.jpg",
+      "20250419084458.jpg",
+      "20250419084500.jpg",
+      "20250419084501.jpg",
+      "20250419084503.jpg",
+      "20250419084504.jpg",
+      "20250419084506.jpg",
+      "20250419084508.jpg",
+      "20250419084510.jpg",
+      "20250419084511.jpg",
+      "20250419084513.jpg",
+      "20250419084515.jpg",
+      "20250419084518.jpg",
+      "20250419084520.jpg",
+      "20250419084522.jpg",
+      "20250419084523.jpg",
+      "20250419084525.jpg",
+      "20250419084527.jpg",
+      "20250419084529.jpg",
+      "20250419084531.jpg",
+      "20250419084533.jpg",
+      "20250419084535.jpg",
+      "20250419084536.jpg",
+      "20250419084538.jpg",
+      "20250419084542.jpg",
+      "20250419084544.jpg",
+      "20250419084546.jpg",
+      "20250419084550.jpg",
+      "20250419084552.jpg",
+      "20250419084554.jpg",
+      "20250419084556.jpg",
+      "20250419084558.jpg",
+      "20250419084600.jpg",
+      "20250419084602.jpg",
+      "20250419084604.jpg",
+      "20250419084606.jpg",
+      "20250419084608.jpg",
+      "20250419084610.jpg",
+      "20250419084612.jpg",
+      "20250419084614.jpg",
+      "20250419084616.jpg",
+      "20250419084618.jpg",
+      "20250419084620.jpg",
+      "20250419084625.jpg",
+      "20250419084627.jpg",
+      "20250419084630.jpg",
+      "20250419084631.jpg",
+      "20250419084633.jpg"
+    ];
+
+    const container = document.querySelector('.gallery');
+    images.forEach(imgName => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      
+      const img = document.createElement('img');
+      img.src = '/microphones/' + imgName;
+      img.alt = imgName;
+      
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'filename';
+      nameDiv.textContent = imgName;
+      
+      card.appendChild(img);
+      card.appendChild(nameDiv);
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>

@@ -12,6 +12,8 @@
     "@prisma/client": "^6.19.3",
     "@react-three/fiber": "^8.16.8",
     "@react-three/postprocessing": "^2.16.2",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
     "next": "14.2.35",
     "ogl": "^1.0.11",
     "postprocessing": "^6.35.5",

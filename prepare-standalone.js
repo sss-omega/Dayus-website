@@ -22,7 +22,7 @@ copyFolderSync(
     path.join(__dirname, '.next', 'standalone', '.next', 'static')
 );
 
-// 2. Copy public folder (excluding microphones)
+// 2. Copy public folder
 console.log('👉 Copying public files to .next/standalone/public...');
 const publicDest = path.join(__dirname, '.next', 'standalone', 'public');
 fs.mkdirSync(publicDest, { recursive: true });
@@ -30,10 +30,11 @@ fs.mkdirSync(publicDest, { recursive: true });
 const publicSource = path.join(__dirname, 'public');
 if (fs.existsSync(publicSource)) {
     fs.readdirSync(publicSource).forEach(file => {
-        if (file === 'microphones') return; // Skip microphones directory
         const srcPath = path.join(publicSource, file);
         const destPath = path.join(publicDest, file);
-        if (fs.lstatSync(srcPath).isFile()) {
+        if (fs.lstatSync(srcPath).isDirectory()) {
+            copyFolderSync(srcPath, destPath);
+        } else {
             fs.copyFileSync(srcPath, destPath);
         }
     });
