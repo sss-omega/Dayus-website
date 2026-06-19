@@ -25,14 +25,14 @@ export default async function ClientLayout({
     <>
       <div className="sticky-header-wrapper">
         <div className="container">
-          <header>
-            <div className="logo" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <header className="main-header">
+            <div className="logo header-logo">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/dauys_logo_transparent_cropped.png" alt="DAUYS" style={{ height: "56px", width: "auto", display: "block" }} />
-              <span style={{ fontSize: "1.5rem", fontWeight: 900, letterSpacing: "1px" }}>{headerTitle}</span>
+              <img src="/dauys_logo_transparent_cropped.png" alt="DAUYS" className="header-logo-img" />
+              <span className="header-logo-text">{headerTitle}</span>
             </div>
-            <nav style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
-              <a href="/" style={{ fontWeight: 600, color: '#ffcc00' }}>{storeLinkText}</a>
+            <nav className="header-nav">
+              <a href="/" className="header-store-link">{storeLinkText}</a>
               <LanguageSwitcher currentLang={localeCookie} />
             </nav>
           </header>
