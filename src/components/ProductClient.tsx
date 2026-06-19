@@ -72,6 +72,7 @@ export default function ProductClient({
 
   const isHandheld = product.name.toLowerCase().includes("handheld");
   const isDOne = product.name.toLowerCase().includes("d-one");
+  const isDS8 = product.name.toLowerCase().includes("ds8");
   const feat1Img = "/microphones/20250419084600.jpg";
   const feat2Img = "/photo_2026-06-17_12-38-13.jpg";
   const feat3Img = "/photo_2026-06-17_12-38-09.jpg";
@@ -176,23 +177,37 @@ export default function ProductClient({
         </>
       )}
 
-      {/* ── GALLERY ── */}
-      {product.galleryUrls && product.galleryUrls.length > 0 && (
-        <section className="pdp-gallery-section reveal-section" style={{ padding: "60px 0" }}>
-          <div className="container">
-            <h2 className="pdp-section-heading" style={{ marginBottom: "30px" }}>
-              {locale === "ru" ? "Галерея" : "Галерея"}
-            </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
-              {product.galleryUrls.map((url, i) => (
-                <div key={i} style={{ borderRadius: "12px", overflow: "hidden", aspectRatio: "1/1", position: "relative", backgroundColor: "rgba(255,255,255,0.02)" }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={url} alt={`${product.name} - Фото ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
-                </div>
-              ))}
+      {isDS8 && (
+        <>
+          <FeatureSection
+            stat="35 Гц" statLabel={locale === "ru" ? "Глубокий бас" : "Терең бас"}
+            title={locale === "ru" ? "Мощные низкие частоты" : "Қуатты төмен жиіліктер"}
+            desc={locale === "ru" ? "8-дюймовый сабвуфер с длинным ходом диффузора обеспечивает мощные и насыщенные низкие частоты." : "Диффузордың ұзын жүрісі бар 8 дюймдік сабвуфер қуатты төмен жиіліктерді қамтамасыз етеді."}
+            imgSrc="/photo_2026-06-20_00-37-38.jpg"
+          />
+
+          <FeatureSection
+            stat="25 мм" statLabel={locale === "ru" ? "Шелковый купол" : "Жібек күмбез"}
+            title={locale === "ru" ? "Кристальная чистота" : "Кристалдай тазалық"}
+            desc={locale === "ru" ? "Сателлитные колонки оснащены 5-дюймовым среднечастотным динамиком и 25-мм твитером – звучание кристально прозрачное." : "Сателлиттік колонкалар 5 дюймдік ОЖ-динамикпен және 25 мм твитермен жабдықталған – дыбыс мөлдір таза."}
+            imgSrc="/photo_2026-06-20_00-37-39.jpg" reverse accent
+          />
+
+          <section className="pdp-feature pdp-feature-full reveal-section">
+            <div className="pdp-feat-full-inner container">
+              <div className="pdp-feat-full-text">
+                <div className="pdp-feature-stat" style={{ fontSize: "5rem" }}>180 Вт</div>
+                <div className="pdp-feature-stat-label" style={{ marginBottom: 20 }}>{locale === "ru" ? "Общая мощность" : "Жалпы қуаты"}</div>
+                <h2 className="pdp-feature-title">{locale === "ru" ? "Полный контроль" : "Толық басқару"}</h2>
+                <p className="pdp-feature-desc" style={{ maxWidth: 520, margin: "0 auto" }}>
+                  {locale === "ru" ? "Регулируйте громкость, баланс высоких частот, уровень сабвуфера, а также управляйте микрофонным входом и реверберацией." : "Дыбыс деңгейін, жоғары жиіліктер балансын, сабвуфер деңгейін, сондай-ақ микрофон мен реверберацияны басқарыңыз."}
+                </p>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/photo_2026-06-20_00-37-40.jpg" alt="DAUYS DS8 Control" className="pdp-feat-full-img" loading="lazy" />
             </div>
-          </div>
-        </section>
+          </section>
+        </>
       )}
 
       {/* ── SPECS TABLE ── */}
