@@ -12,6 +12,7 @@ interface ProductClientProps {
     name: string;
     price: number | null;
     imageUrl: string | null;
+    galleryUrls?: string[];
     kaspiLink: string | null;
     category: { name: string };
   };
@@ -173,6 +174,25 @@ export default function ProductClient({
             imgSrc={feat4Img}
           />
         </>
+      )}
+
+      {/* ── GALLERY ── */}
+      {product.galleryUrls && product.galleryUrls.length > 0 && (
+        <section className="pdp-gallery-section reveal-section" style={{ padding: "60px 0" }}>
+          <div className="container">
+            <h2 className="pdp-section-heading" style={{ marginBottom: "30px" }}>
+              {locale === "ru" ? "Галерея" : "Галерея"}
+            </h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+              {product.galleryUrls.map((url, i) => (
+                <div key={i} style={{ borderRadius: "12px", overflow: "hidden", aspectRatio: "1/1", position: "relative", backgroundColor: "rgba(255,255,255,0.02)" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={url} alt={`${product.name} - Фото ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
       )}
 
       {/* ── SPECS TABLE ── */}

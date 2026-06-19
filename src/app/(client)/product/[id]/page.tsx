@@ -131,6 +131,7 @@ export default async function ProductPage({ params }: Props) {
           name: product.name,
           price: product.price,
           imageUrl: product.imageUrl,
+          galleryUrls: product.galleryUrls,
           kaspiLink: product.kaspiLink,
           category: { name: product.category.name },
         }}
