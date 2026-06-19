@@ -70,6 +70,7 @@ export default function ProductClient({
   }, []);
 
   const isHandheld = product.name.toLowerCase().includes("handheld");
+  const isDOne = product.name.toLowerCase().includes("d-one");
   const feat1Img = "/microphones/20250419084600.jpg";
   const feat2Img = "/photo_2026-06-17_12-38-13.jpg";
   const feat3Img = "/photo_2026-06-17_12-38-09.jpg";
@@ -135,40 +136,44 @@ export default function ProductClient({
       </div>
     </section>
 
-      {/* ── FEATURE 1 ── */}
-      <FeatureSection
-        stat={t.feat1Stat} statLabel={t.feat1StatLabel}
-        title={t.feat1Title} desc={t.feat1Desc}
-        imgSrc={feat1Img}
-      />
+      {isDOne && (
+        <>
+          {/* ── FEATURE 1 ── */}
+          <FeatureSection
+            stat={t.feat1Stat} statLabel={t.feat1StatLabel}
+            title={t.feat1Title} desc={t.feat1Desc}
+            imgSrc={feat1Img}
+          />
 
-      {/* ── FEATURE 2 ── */}
-      <FeatureSection
-        stat={t.feat2Stat} statLabel={t.feat2StatLabel}
-        title={t.feat2Title} desc={t.feat2Desc}
-        imgSrc={feat2Img} reverse accent
-      />
+          {/* ── FEATURE 2 ── */}
+          <FeatureSection
+            stat={t.feat2Stat} statLabel={t.feat2StatLabel}
+            title={t.feat2Title} desc={t.feat2Desc}
+            imgSrc={feat2Img} reverse accent
+          />
 
-      {/* ── FEATURE 3: full-width battery ── */}
-      <section className="pdp-feature pdp-feature-full reveal-section">
-        <div className="pdp-feat-full-inner container">
-          <div className="pdp-feat-full-text">
-            <div className="pdp-feature-stat" style={{ fontSize: "5rem" }}>{t.feat3Stat}</div>
-            <div className="pdp-feature-stat-label" style={{ marginBottom: 20 }}>{t.feat3StatLabel}</div>
-            <h2 className="pdp-feature-title">{t.feat3Title}</h2>
-            <p className="pdp-feature-desc" style={{ maxWidth: 520, margin: "0 auto" }}>{t.feat3Desc}</p>
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={feat3Img} alt={t.feat3Title} className="pdp-feat-full-img" loading="lazy" />
-        </div>
-      </section>
+          {/* ── FEATURE 3: full-width battery ── */}
+          <section className="pdp-feature pdp-feature-full reveal-section">
+            <div className="pdp-feat-full-inner container">
+              <div className="pdp-feat-full-text">
+                <div className="pdp-feature-stat" style={{ fontSize: "5rem" }}>{t.feat3Stat}</div>
+                <div className="pdp-feature-stat-label" style={{ marginBottom: 20 }}>{t.feat3StatLabel}</div>
+                <h2 className="pdp-feature-title">{t.feat3Title}</h2>
+                <p className="pdp-feature-desc" style={{ maxWidth: 520, margin: "0 auto" }}>{t.feat3Desc}</p>
+              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={feat3Img} alt={t.feat3Title} className="pdp-feat-full-img" loading="lazy" />
+            </div>
+          </section>
 
-      {/* ── FEATURE 4 ── */}
-      <FeatureSection
-        stat={t.feat4Stat} statLabel={t.feat4StatLabel}
-        title={t.feat4Title} desc={t.feat4Desc}
-        imgSrc={feat4Img}
-      />
+          {/* ── FEATURE 4 ── */}
+          <FeatureSection
+            stat={t.feat4Stat} statLabel={t.feat4StatLabel}
+            title={t.feat4Title} desc={t.feat4Desc}
+            imgSrc={feat4Img}
+          />
+        </>
+      )}
 
       {/* ── SPECS TABLE ── */}
       {specs.length > 0 && (
@@ -188,126 +193,128 @@ export default function ProductClient({
       )}
 
       {/* ── MANUAL ACCORDIONS ── */}
-      <section className="pdp-manual-section reveal-section">
-        <div className="container">
-          <h2 className="pdp-section-heading">{t.manualTitle}</h2>
-          <div style={{ marginTop: 30 }}>
-            <details className="manual-accordion" open>
-              <summary>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
-                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                  </svg>
-                  <span>{t.setupSection}</span>
-                </div>
-              </summary>
-              <div className="manual-content">
-                {locale === "ru" ? (
-                  <ol>
-                    <li><strong>Антенны:</strong> Перпендикулярно приёмнику, отступ от стен более 1 м.</li>
-                    <li><strong>Питание:</strong> Адаптер 12V DC → разъём приёмника.</li>
-                    <li><strong>MIX OUT:</strong> Jack 6.3 мм → микшер или акустика.</li>
-                    <li><strong>XLR:</strong> Разъёмы A/B → микшерный пульт (балансный).</li>
-                  </ol>
-                ) : (
-                  <ol>
-                    <li><strong>Антенналар:</strong> Қабылдағышқа перпендикуляр, қабырғадан 1 м.</li>
-                    <li><strong>Қорек:</strong> 12V DC адаптер → қабылдағыш ұяшығы.</li>
-                    <li><strong>MIX OUT:</strong> Jack 6.3 мм → микшер немесе акустика.</li>
-                    <li><strong>XLR:</strong> A/B ұяшықтары → микшерлік пульт.</li>
-                  </ol>
-                )}
-              </div>
-            </details>
-            <details className="manual-accordion">
-              <summary>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
-                    <path d="M12 2v20M17 5a9 9 0 0 0-10 0M19 8a6 6 0 0 0-14 0M21 11a3 3 0 0 0-18 0" />
-                  </svg>
-                  <span>{t.syncSection}</span>
-                </div>
-              </summary>
-              <div className="manual-content">
-                {locale === "ru" ? (
-                  <ol>
-                    <li>Выключите передатчик.</li>
-                    <li>Выберите «СОПРЯЖЕНИЕ» в меню приёмника.</li>
-                    <li>Включите передатчик рядом с приёмником (до 20 м).</li>
-                    <li>Дождитесь «УСПЕШНАЯ СИНХРОНИЗАЦИЯ».</li>
-                    <li><strong>SKIP AUTO:</strong> автоматически подбирает чистую частоту при помехах.</li>
-                  </ol>
-                ) : (
-                  <ol>
-                    <li>Таратқышты өшіріңіз.</li>
-                    <li>Мәзірден «СОПРЯЖЕНИЕ» таңдаңыз.</li>
-                    <li>Таратқышты жақын (20 м) қосыңыз.</li>
-                    <li>«УСПЕШНАЯ СИНХРОНИЗАЦИЯ» хабарламасын күтіңіз.</li>
-                    <li><strong>SKIP AUTO:</strong> кедергіде таза жиілікті автоматты таңдайды.</li>
-                  </ol>
-                )}
-              </div>
-            </details>
-            <details className="manual-accordion">
-              <summary>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
-                    <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-                    <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-                    <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" />
-                  </svg>
-                  <span>{t.screenSection}</span>
-                </div>
-              </summary>
-              <div className="manual-content">
-                <ul>
+      {isDOne && (
+        <section className="pdp-manual-section reveal-section">
+          <div className="container">
+            <h2 className="pdp-section-heading">{t.manualTitle}</h2>
+            <div style={{ marginTop: 30 }}>
+              <details className="manual-accordion" open>
+                <summary>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                    </svg>
+                    <span>{t.setupSection}</span>
+                  </div>
+                </summary>
+                <div className="manual-content">
                   {locale === "ru" ? (
-                    <>
-                      <li><strong>Громкость:</strong> Ручки A/B — независимая регулировка каналов.</li>
-                      <li><strong>Эхо (ECHO):</strong> Короткое нажатие ручки, диапазон 1–100.</li>
-                      <li><strong>Задержка (DELAY):</strong> Кнопка A/B, диапазон 1–100.</li>
-                    </>
+                    <ol>
+                      <li><strong>Антенны:</strong> Перпендикулярно приёмнику, отступ от стен более 1 м.</li>
+                      <li><strong>Питание:</strong> Адаптер 12V DC → разъём приёмника.</li>
+                      <li><strong>MIX OUT:</strong> Jack 6.3 мм → микшер или акустика.</li>
+                      <li><strong>XLR:</strong> Разъёмы A/B → микшерный пульт (балансный).</li>
+                    </ol>
                   ) : (
-                    <>
-                      <li><strong>Дыбыс:</strong> A/B тұтқалары — дербес реттеу.</li>
-                      <li><strong>Жаңғырық (ECHO):</strong> Тұтқаны қысқа басу, 1–100.</li>
-                      <li><strong>Кешігу (DELAY):</strong> A/B түймесі, 1–100.</li>
-                    </>
+                    <ol>
+                      <li><strong>Антенналар:</strong> Қабылдағышқа перпендикуляр, қабырғадан 1 м.</li>
+                      <li><strong>Қорек:</strong> 12V DC адаптер → қабылдағыш ұяшығы.</li>
+                      <li><strong>MIX OUT:</strong> Jack 6.3 мм → микшер немесе акустика.</li>
+                      <li><strong>XLR:</strong> A/B ұяшықтары → микшерлік пульт.</li>
+                    </ol>
                   )}
-                </ul>
-              </div>
-            </details>
-            <details className="manual-accordion">
-              <summary>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                  </svg>
-                  <span>{t.powerSection}</span>
                 </div>
-              </summary>
-              <div className="manual-content">
-                <ul>
+              </details>
+              <details className="manual-accordion">
+                <summary>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
+                      <path d="M12 2v20M17 5a9 9 0 0 0-10 0M19 8a6 6 0 0 0-14 0M21 11a3 3 0 0 0-18 0" />
+                    </svg>
+                    <span>{t.syncSection}</span>
+                  </div>
+                </summary>
+                <div className="manual-content">
                   {locale === "ru" ? (
-                    <>
-                      <li><strong>Усиление (GAIN):</strong> от −10 до +10 дБ.</li>
-                      <li><strong>Мощность (TX POW):</strong> H (80м), M (средняя), L (низкая).</li>
-                      <li><strong>Батарея:</strong> 18650 (3.7В), зарядка Type-C, 8+ часов.</li>
-                    </>
+                    <ol>
+                      <li>Выключите передатчик.</li>
+                      <li>Выберите «СОПРЯЖЕНИЕ» в меню приёмника.</li>
+                      <li>Включите передатчик рядом с приёмником (до 20 м).</li>
+                      <li>Дождитесь «УСПЕШНАЯ СИНХРОНИЗАЦИЯ».</li>
+                      <li><strong>SKIP AUTO:</strong> автоматически подбирает чистую частоту при помехах.</li>
+                    </ol>
                   ) : (
-                    <>
-                      <li><strong>Күшейту (GAIN):</strong> −10-нан +10 дБ.</li>
-                      <li><strong>Қуат (TX POW):</strong> H (80м), M, L.</li>
-                      <li><strong>Батарея:</strong> 18650 (3.7В), Type-C, 8+ сағат.</li>
-                    </>
+                    <ol>
+                      <li>Таратқышты өшіріңіз.</li>
+                      <li>Мәзірден «СОПРЯЖЕНИЕ» таңдаңыз.</li>
+                      <li>Таратқышты жақын (20 м) қосыңыз.</li>
+                      <li>«УСПЕШНАЯ СИНХРОНИЗАЦИЯ» хабарламасын күтіңіз.</li>
+                      <li><strong>SKIP AUTO:</strong> кедергіде таза жиілікті автоматты таңдайды.</li>
+                    </ol>
                   )}
-                </ul>
-              </div>
-            </details>
+                </div>
+              </details>
+              <details className="manual-accordion">
+                <summary>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
+                      <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
+                      <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
+                      <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
+                      <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" />
+                    </svg>
+                    <span>{t.screenSection}</span>
+                  </div>
+                </summary>
+                <div className="manual-content">
+                  <ul>
+                    {locale === "ru" ? (
+                      <>
+                        <li><strong>Громкость:</strong> Ручки A/B — независимая регулировка каналов.</li>
+                        <li><strong>Эхо (ECHO):</strong> Короткое нажатие ручки, диапазон 1–100.</li>
+                        <li><strong>Задержка (DELAY):</strong> Кнопка A/B, диапазон 1–100.</li>
+                      </>
+                    ) : (
+                      <>
+                        <li><strong>Дыбыс:</strong> A/B тұтқалары — дербес реттеу.</li>
+                        <li><strong>Жаңғырық (ECHO):</strong> Тұтқаны қысқа басу, 1–100.</li>
+                        <li><strong>Кешігу (DELAY):</strong> A/B түймесі, 1–100.</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </details>
+              <details className="manual-accordion">
+                <summary>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--accent-color)" }}>
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                    <span>{t.powerSection}</span>
+                  </div>
+                </summary>
+                <div className="manual-content">
+                  <ul>
+                    {locale === "ru" ? (
+                      <>
+                        <li><strong>Усиление (GAIN):</strong> от −10 до +10 дБ.</li>
+                        <li><strong>Мощность (TX POW):</strong> H (80м), M (средняя), L (низкая).</li>
+                        <li><strong>Батарея:</strong> 18650 (3.7В), зарядка Type-C, 8+ часов.</li>
+                      </>
+                    ) : (
+                      <>
+                        <li><strong>Күшейту (GAIN):</strong> −10-нан +10 дБ.</li>
+                        <li><strong>Қуат (TX POW):</strong> H (80м), M, L.</li>
+                        <li><strong>Батарея:</strong> 18650 (3.7В), Type-C, 8+ сағат.</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </details>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── CTA ── */}
       <section className="pdp-cta-section reveal-section">
